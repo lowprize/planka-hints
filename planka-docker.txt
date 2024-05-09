@@ -1,0 +1,47 @@
+Fresh install:
+ sudo -i
+ mkdir /opt/planka
+ curl -L https://raw.githubusercontent.com/plankanban/planka/master/docker-compose.yml -o /opt/planka/docker-compose.yml
+Secret Key for ENV file:
+openssl rand -hex 64
+Prepare for deploy:
+Edit: 
+ nano docker-compose .yml
+- Past in your generated SECRET_KEY
+- Change the BASE_URL
+- Set admin user
+
+Sample:
+cat docker-compose.yml 
+version: '3'
+
+services:
+  planka:
+    image: ghcr.io/plankanban/planka:latest
+    restart: on-failure
+    volumes:
+      - user-avatars:/app/public/user-avatars
+      - project-background-images:/app/public/project-background-images
+      - attachments:/app/private/attachments
+    ports:
+      - 3000:1337
+    environment:
+      - BASE_URL=http://localhost:3000
+      - DATABASE_URL=postgresql://postgres@postgres/planka
+      - SECRET_KEY=07a837f85607be860f630b3eb788615ffdc20870551fd5edcbc31d7f718c26226fc04900016ba4621e62bbbe3d0a17625bdd374b7cd44c93befc55c67a9d4534
+
+      # - TRUST_PROXY=0
+      # - TOKEN_EXPIRES_IN=365 # In days
+
+      # related: https://github.com/knex/knex/issues/2354
+      # As knex does not pass query parameters from the connection string we
+      # have to use environment variables in order to pass the desired values, e.g.
+      # - PGSSLMODE=<value>
+
+      # Configure knex to accept SSL certificates
+      # - KNEX_REJECT_UNAUTHORIZED_SSL_CERTIFICATE=false
+
+      - DEFAULT_ADMIN_EMAIL=root@company.com # Do not remove if you want to prevent this user from being edited/deleted
+      - DEFAULT_ADMIN_PASSWORD=P@ssword1234
+      - DEFAULT_ADMIN_NAME=Mega Supervisor
+      - DEFAULT_ADMIN_USERNAME=root
