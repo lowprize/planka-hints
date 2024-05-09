@@ -1,1 +1,2 @@
 # planka-hints
+Zalozeni
