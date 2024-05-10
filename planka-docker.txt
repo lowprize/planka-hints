@@ -45,3 +45,11 @@ services:
       - DEFAULT_ADMIN_PASSWORD=P@ssword1234
       - DEFAULT_ADMIN_NAME=Mega Supervisor
       - DEFAULT_ADMIN_USERNAME=root
+
+
+Update docker container:
+ docker-compose pull 
+ 
+ Ovladani:
+  docker-compose up -d
+  docker-compose down
